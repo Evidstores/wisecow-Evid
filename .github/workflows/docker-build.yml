@@ -1,0 +1,33 @@
+name: Docker Build and Test
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v2
+
+    - name: Build Docker image
+      uses: docker/build-push-action@v4
+      with:
+        context: .
+        push: false
+        tags: wisecow:latest
+
+    - name: Run container
+      run: |
+        docker run -d -p 4499:4499 --name wisecow_test wisecow:latest
+        sleep 5
+        docker ps
+        docker logs wisecow_test
+        docker stop wisecow_test
+        docker rm wisecow_test
