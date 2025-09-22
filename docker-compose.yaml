@@ -1,0 +1,7 @@
+version: '3'
+services:
+  wisecow:
+    image: wisecow:latest
+    build: .
+    ports:
+      - "4499:4499"
